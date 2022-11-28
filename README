@@ -1,0 +1,3 @@
+This is a simple modification of Wii Swiss Booter to enable the higher quality 480p output discovered by Extrems.
+
+gpio.h, i2c.c, and i2c.h are taken from https://github.com/Aurelio92/RVLoader/

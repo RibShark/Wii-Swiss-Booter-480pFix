@@ -5,12 +5,12 @@
 #include <malloc.h>
 
 #include <fat.h>
-#include <ogc/video.h>
 #include <ogc/usbstorage.h>
 #include <sdcard/wiisd_io.h>
 #include <sdcard/gcsd.h>
 
 #include "dolloader_dol.h"
+#include "i2c.h"
 
 #define BC 0x0000000100000100ULL
 
@@ -181,12 +181,11 @@ int main(int argc, char* argv[])
 	
 	*(volatile unsigned int *)0xCC003024 |= 7;
 
-	// Reinit video to fix 480p
-	VIDEO_Init();
-	GXRModeObj *rmode = VIDEO_GetPreferredMode(NULL);
-	VIDEO_Configure(rmode);
-	VIDEO_Flush();
-	VIDEO_WaitVSync();
+	// Write to AVE i2c to fix 480p
+	u8 i2c_error;
+	i2c_init();
+	i2c_write8(0xE0, 0x65, 0x03, &i2c_error);
+	i2c_deinit();
 
 	ES_LaunchTitle(BC, &view);
 
