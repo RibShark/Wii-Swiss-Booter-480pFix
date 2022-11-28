@@ -181,8 +181,13 @@ int main(int argc, char* argv[])
 	
 	*(volatile unsigned int *)0xCC003024 |= 7;
 
+	// Reinit video to fix 480p
 	VIDEO_Init();
-	
+	GXRModeObj *rmode = VIDEO_GetPreferredMode(NULL);
+	VIDEO_Configure(rmode);
+	VIDEO_Flush();
+	VIDEO_WaitVSync();
+
 	ES_LaunchTitle(BC, &view);
 
 	return 0;
